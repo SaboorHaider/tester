@@ -41,7 +41,7 @@ export default function CheckoutPage() {
     address1: "",
     address2: "",
   });
-  const [setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(false); // Fixed state definition
   const [generatedUserId] = useState("");
 
   useEffect(() => {
@@ -50,7 +50,11 @@ export default function CheckoutPage() {
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setUserDetails({ ...userDetails, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+    setUserDetails((prevDetails) => ({
+      ...prevDetails,
+      [id]: value,
+    }));
   };
 
   const calculateTotal = () => {
@@ -59,7 +63,6 @@ export default function CheckoutPage() {
       .toFixed(2);
   };
 
-  // Handle form submission with type-safe event
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -98,10 +101,10 @@ export default function CheckoutPage() {
       const result = await response.json();
       if (result.success) {
         console.log("Email sent successfully:", result);
+        setShowPopup(true); // Now this works
       } else {
         console.error("Failed to send email:", result);
       }
-      setShowPopup(true);
     } catch (error) {
       console.error("Error during form submission:", error);
       alert("An error occurred. Please try again.");
@@ -283,15 +286,27 @@ export default function CheckoutPage() {
                 onChange={handleInputChange}
               />
             </div>
+
+            <button type="submit" className="w-full py-2 bg-orange-500 text-white rounded-md">
+              Place Order
+            </button>
           </div>
-          <button
-            type="submit"
-            className="px-6 py-2 flex bg-orange-500 text-white shadow-sm text-sm font-medium hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 w-72 h-12"
-          >
-            Submit
-          </button>
-          <h1>After Completing the order product will be proceed to your address within 1-2 hours. thanks for choosing us!</h1>
         </form>
+
+        {showPopup && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+              <h2 className="text-xl font-semibold">Order Confirmed!</h2>
+              <p>Thank you for your purchase. Your order is being processed.</p>
+              <button
+                className="mt-4 px-6 py-2 bg-orange-500 text-white rounded-md"
+                onClick={() => setShowPopup(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <Footer />
