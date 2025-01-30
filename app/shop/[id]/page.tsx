@@ -1,11 +1,10 @@
-"use client"
-
 import { FaFacebook } from "react-icons/fa";
 import { AiFillTwitterCircle } from "react-icons/ai";
 import { FaInstagram } from "react-icons/fa";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoIosGitCompare } from "react-icons/io";
 import React from 'react';
+import { shopdetail } from "../../../data/data";
 import { IoIosStar } from "react-icons/io";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,8 +15,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 
-const Page  = async () => {
-  // Fetch food item directly using a static ID or another logic to fetch a specific item
+const Page = async () => {
   const food = await client.fetch(
     `*[_type == "food"][0]{
       name,
@@ -27,9 +25,7 @@ const Page  = async () => {
       image,
       description,
       available,
-      tags,
-      rating,
-      review
+      tags
     }`
   );
 
@@ -67,7 +63,8 @@ const Page  = async () => {
             <div className="container px-5 py-14 mx-auto">
               <div className="lg:w-4/5 mx-auto flex ">
                 <div className="flex gap-2">
-                  <div></div>
+                  <div>
+                  </div>
                   <div>
                     <Image
                       alt="ecommerce"
@@ -80,39 +77,30 @@ const Page  = async () => {
                 </div>
                 <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
                   <button className="text-sm title-font rounded-sm p-1 text-whitetext bg-bordercoloryello tracking-widest">
-                    {food.available === true ? "In Stock" : "Out of Stock"}
+                    {food.available == true ? "In Stock" : "Out of Stock"}
                   </button>
                   <h1 className="text-gray-900 text-3xl title-font mb-1 pb-4 pt-1 font-bold">
                     {food.name}
                   </h1>
                   <p className="leading-relaxed text-[14px]">{food.description}</p>
                   <div className="flex flex-col gap-1 mt-6 items-start pb-5 border-b-2 border-gray-100 mb-5">
-                    <div className="flex justify-between gap-6">
-                      <p className="text-[20px] text-bordercoloryello font-bold">
-                        ${food.originalPrice}
-                      </p>
-                      <div className="flex gap-1">
-                        <p className="line-through text-[20px] font-semibold text-red-600">
-                          ${food.price}
-                        </p>
+                    <div className='flex justify-between gap-6'>
+                      <p className='text-[20px] text-bordercoloryello font-bold'>${food.originalPrice}</p>
+                      <div className='flex gap-1'>
+                        <p className="line-through text-[20px] font-semibold text-red-600">${food.price}</p>
                         {food.originalPrice > food.price && (
                           <p className="text-[15px]">
-                            {Math.round(
-                              ((food.originalPrice - food.price) / food.originalPrice) * 100
-                            )}
-                            % OFF
+                            {Math.round(((food.originalPrice - food.price) / food.originalPrice) * 100)}% OFF
                           </p>
                         )}
                       </div>
                     </div>
-                    <div className="flex gap-5 text-[13px]">
-                      <h1 className="text-bordercoloryello flex">
-                        <IoIosStar /> <IoIosStar /> <IoIosStar /> <IoIosStar /> <IoIosStar />
-                      </h1>
-                      <div className="border-b font-semibold tracking-tight transition-colors first:mt-0 pt-[20px] scroll-m-20 " />
-                      <h1 className="leading-[16px]">{food.rating} Rating</h1>
-                      <div className="border-b font-semibold tracking-tight transition-colors first:mt-0 pt-[20px] scroll-m-20 " />
-                      <h1 className="leading-[16px]">{food.review} Review</h1>
+                    <div className='flex gap-5 text-[13px]'>
+                      <h1 className='text-bordercoloryello flex'> <IoIosStar /> <IoIosStar /> <IoIosStar /> <IoIosStar /> <IoIosStar /></h1>
+                      <div className='border-b font-semibold tracking-tight transition-colors first:mt-0 pt-[20px] scroll-m-20 ' />
+                      <h1 className='leading-[16px]'>{food.rating} Rating</h1>
+                      <div className='border-b font-semibold tracking-tight transition-colors first:mt-0 pt-[20px] scroll-m-20 ' />
+                      <h1 className='leading-[16px]'>{food.review} Review</h1>
                     </div>
                     <div className="flex items-center gap-4 mb-4">
                       <AddToCart
@@ -127,27 +115,16 @@ const Page  = async () => {
                   </div>
                   <div>
                     <div className="flex flex-col gap-3 ">
-                      <h1 className="flex leading-[15px] gap-[15px] text-[15px]">
-                        <IoMdHeartEmpty /> Add to Wishlist <IoIosGitCompare />Compare
-                      </h1>
+                      <h1 className="flex leading-[15px] gap-[15px] text-[15px]"><IoMdHeartEmpty /> Add to Wishlist <IoIosGitCompare />Compare</h1>
+                      <h1 className="leading-[15px] gap-[15px] text-[15px]">Category: {food.category} </h1>
                       <h1 className="leading-[15px] gap-[15px] text-[15px]">
-                        Category: {food.category}
-                      </h1>
-                      <h1 className="leading-[15px] gap-[15px] text-[15px]">
-                        Tags:{" "}
-                        {food.tags.map((tag: string, index: number) => (
-                          <span key={index}>
-                            {tag}
-                            {index < food.tags.length - 1 ? ", " : ""}
-                          </span>
+                        Tags: {food.tags.map((tag: string, index: number) => (
+                          <span key={index}>{tag}{index < food.tags.length - 1 ? ', ' : ''}</span>
                         ))}
                       </h1>
                     </div>
                     <div className="flex leading-[20px] gap-4 pt-3">
-                      Share: <FaInstagram className="text-[20px]" />{" "}
-                      <AiFillTwitterCircle className="text-[20px]" />{" "}
-                      <FaFacebook className="text-[20px]" />{" "}
-                      <AiFillTwitterCircle className="text-[20px]" />
+                      Share: <FaInstagram className="text-[20px]" /> <AiFillTwitterCircle className="text-[20px]" /> <FaFacebook className="text-[20px]" /> <AiFillTwitterCircle className="text-[20px]" />
                     </div>
                   </div>
                 </div>
@@ -155,8 +132,34 @@ const Page  = async () => {
             </div>
           </section>
         ) : (
-          <p>Data not found for the given food item.</p>
+          <p>Data not found for the given ID.</p>
         )}
+      </div>
+      {shopdetail.map((foodItem) => {
+        return (
+          <div key={foodItem.id} className="mt-[0px] mb-[100px] lg:w-4/5  px-12 mx-auto">
+            <div className="flex gap-10">
+              <button className="bg-bordercoloryello text-whitetext p-2 ">Description</button><button>Reviews (22)</button>
+            </div>
+            <div className="flex flex-col gap-4 text-[14px]">
+              <p>{foodItem.description}</p>
+              <p>{foodItem.senddespara}</p>
+              <h1 className="font-bold text-[16px]">Key Benefits</h1>
+              <p className="text-[13px]">. {foodItem.firstkeybenficts}</p>
+              <p className="text-[13px]">. {foodItem.secondkey}</p>
+              <p className="text-[13px]">. {foodItem.thirdkey}</p>
+              <p className="text-[13px]">. {foodItem.fourthkey}</p>
+              <p className="text-[13px]">. {foodItem.fiftkey}</p>
+            </div>
+          </div>
+        );
+      })}
+      <div>
+        <div className="my-[40px]">
+          <h1 className="mx-14 font-bold text-[20px]">Similar Products </h1>
+          <Link href={`/${food.category}`}>
+          </Link>
+        </div>
       </div>
       <footer>
         <Footer />

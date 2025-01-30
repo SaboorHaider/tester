@@ -1,20 +1,20 @@
-"use client"
-import React from 'react';
+"use client";
+import React from "react";
 import { databloglistindivi } from "../../../data/data";
-import Header from '../../../components/Header';
-import Image from 'next/image';
-import Link from 'next/link';
+import Header from "../../../components/Header";
+import Image from "next/image";
+import Link from "next/link";
 import { GoCommentDiscussion } from "react-icons/go";
 import { PiUserCircleGear } from "react-icons/pi";
 import { IoLogoGithub } from "react-icons/io";
-import { FaInstagram, FaLinkedin } from "react-icons/fa6";
+import { FaInstagram, FaLinkedin, FaFacebookF, FaGithub } from "react-icons/fa";
 import { BsCalendarMonth } from "react-icons/bs";
-import { MdKeyboardArrowRight } from 'react-icons/md';
-import Footer from '../../../components/Footer';
-import { FaFacebookF, FaGithub, FaSearch, FaStar, } from 'react-icons/fa';
+import { MdKeyboardArrowRight } from "react-icons/md";
+import Footer from "../../../components/Footer";
+import { FaSearch, FaStar } from "react-icons/fa";
 
 const Page = () => {
-  const filtered = databloglistindivi[0]; // Adjust to select a specific post or remove this logic
+  const filtered = databloglistindivi[0]; // Assuming you are getting the first post
 
   return (
     <div className="bg-white">
@@ -63,15 +63,17 @@ const Page = () => {
             <h1 className="lg:text-[24px] text-[20px] font-bold font-helvetica text-blackkk">
               {filtered?.title}
             </h1>
-            <p className="lg:w-[550px] h-[120px] w-[300px] pt-[30px] font-medium text-[15px] text-blackkk">
-              {filtered?.para}
-            </p>
-            <p className="lg:w-[550px] h-[120px] w-[300px] pt-[30px] font-medium text-[15px] text-blackkk">
-              {filtered?.para}
-            </p>
-            <p className="lg:w-[550px] h-[120px] w-[300px] pt-[30px] font-medium text-[15px] text-blackkk">
-              {filtered?.para}
-            </p>
+
+            {/* Ensure para is an array and map through it */}
+            {Array.isArray(filtered?.para) && filtered?.para.length > 0 ? (
+              filtered?.para.map((para, index) => (
+                <p key={index} className="lg:w-[550px] h-[120px] w-[300px] pt-[30px] font-medium text-[15px] text-blackkk">
+                  {para}
+                </p>
+              ))
+            ) : (
+              <p>No content available.</p> // Show if para is empty or not an array
+            )}
 
             <div className="lg:flex gap-7 mt-[20px] lg:w-[580px] w-[300px]">
               <div>
@@ -90,19 +92,13 @@ const Page = () => {
               </div>
             </div>
 
-            <p className="lg:w-[550px] h-[120px] w-[300px] pt-[30px] font-medium text-[15px] text-blackkk">
-              {filtered?.para}
-            </p>
-            <p className="lg:w-[550px] h-[120px] w-[300px] pt-[30px] font-medium text-[15px] text-blackkk">
-              {filtered?.para}
-            </p>
             <div className="border-[1px] lg:h-[40px] h-[55px] lg:mt-0 mt-[40px] lg:flex justify-between p-2 text-[13px]">
               <div className="flex gap-3">
                 <h1 className="font-bold">Tags:</h1>
-                <h1 className="text-gray-600">Resturant, Dinner, Pizza, Yummy.</h1>
+                <h1 className="text-gray-600">Restaurant, Dinner, Pizza, Yummy.</h1>
               </div>
               <h1 className="flex gap-3 text-gray-700">
-                Share:{' '}
+                Share:{" "}
                 <a className="text-xl" href="https://www.linkedin.com/in/abdul-saboor-b57043288">
                   <FaLinkedin />
                 </a>
